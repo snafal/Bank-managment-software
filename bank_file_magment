@@ -1,0 +1,388 @@
+#include<iostream>  //use for cin cout
+#include<windows.h> //use for sleep function and system("cls")
+#include<string>    //use for string valus
+#include<fstream>  //use for file handling
+#include <conio.h> //use for getch()
+using namespace std;
+
+
+
+
+
+class Account
+
+{
+private:
+    string fname,lname;
+    int age ;
+    char id_number[12],mobail_no[10];
+    float money,wmoney;
+
+
+public:
+
+    Aocount()
+    {
+
+
+        return 0;
+
+    }
+    int create_account();
+    int show_account_deatils();
+    int withdrawal();
+    int deposit();
+
+
+};
+
+Account::create_account()
+{
+    system("cls");
+    cout<<"\n\n\t\tPLASE ENTER YOUR FIRST NAME:-";
+    cin.get();
+    getline(cin,fname);
+    cout<<"\t\tPLASE ENTER YOUR LAST NAME:-";
+    getline(cin,lname);
+    cout<<"\t\tPLASE ENTER YOUR AGE:-";
+    cin>>age;
+    cout<<"\t\tPLASE ENTER YOUR ID NUMBER:-";
+    cin>>id_number;
+    cout<<"\t\tPLASE ENTER YOUR Mobail no:-";
+    cin>>mobail_no;
+    cout<<"\t\tPLASE ENTER MONEY no:-";
+    cin>>money;
+
+
+
+
+    cout<<"\n\n\n"<<fname<<" "<<lname<<" "<<age<<" "<<id_number<<" "<<mobail_no<<" "<<money;
+
+    fstream rec;
+    rec.open("bank_recode.txt", ios::app | ios::out);
+    rec<<fname<<" "<<lname<<" "<<age<<" "<<id_number<<" "<<mobail_no<<" "<<money<<endl;
+
+    cout<<"\n\n\t\tAdd another account?? "<<endl;
+    cout<<"\t\tyes :- y"<<endl<<"No:-Press any key"<<endl;
+
+    char choice;
+    cin>>choice;
+
+    if(choice=='y')
+        {
+            Account obj1;
+            obj1.create_account();
+        }
+
+
+
+
+
+    return 0;
+}
+
+Account::show_account_deatils()
+{
+    fstream file;
+    file.open("bank_recode.txt", ios::in);
+    if (!file)
+    {
+        cout << "\n\t\t\tNo Data Is Present...";
+        file.close();
+    }else
+    {   int total=0;
+        file >> fname >>lname >> age >> id_number>> mobail_no>>money;
+        while (!file.eof())
+            {
+            cout << "\n\n\t\t\t Account No.: " << ++total << endl;
+            cout << "\t\t\t First Name: " << fname << endl;
+            cout << "\t\t\t Last Name: " << lname << endl;
+            cout << "\t\t\t Age: " << age << endl;
+            cout << "\t\t\t Id no: " << id_number << endl;
+            cout << "\t\t\t Mobail no: " << mobail_no << endl;
+            cout << "\t\t\t Cash Amount: " << money << endl;
+            file >> fname >>lname >> age >> id_number>> mobail_no>>money;
+            }
+    }
+    file.close();
+    return 0;
+}
+
+Account::deposit()
+{
+int accno,count1;
+  count1=0;
+    cout<<"Enter your Account number";
+    cin>>accno;
+
+
+     fstream file;
+    file.open("bank_recode.txt",ios::app | ios::in);
+    if (!file)
+    {
+        cout << "\n\t\t\tNo Data Is Present...";
+        file.close();
+    }else
+
+        file >> fname >>lname >> age >> id_number>> mobail_no>>money;
+        fstream temp;
+        temp.open("temp.txt",ios::app | ios::in);
+        while (!file.eof())
+            {
+                count1++;
+
+
+                if(count1==accno)
+                {
+                    cout<<"Your acoount balnace is :-"<<money;
+                    cout<<"\nEnter your money amount";
+                    cin>>wmoney;
+
+
+                    money=money+wmoney;
+                    cout<<"Your account Balance is "<<money<<endl;
+                    temp << fname<<" " <<lname<<" "<< age <<" " <<id_number<<" " <<mobail_no<<" "<<money<<endl;
+
+
+                }else
+                {
+                    temp << fname<<" " <<lname<<" "<< age <<" " <<id_number<<" " <<mobail_no<<" "<<money<<endl;
+                }
+
+                file >> fname >>lname >> age >> id_number>> mobail_no>>money;
+            }
+
+
+            file.close();
+            temp.close();
+            remove("bank_recode.txt");
+            rename("temp.txt","bank_recode.txt");
+            return 0;
+
+
+
+}
+
+Account::withdrawal()
+{
+    int accno,count1=0;
+    cout<<"Enter your Account number";
+    cin>>accno;
+
+
+     fstream file;
+    file.open("bank_recode.txt",ios::app | ios::in);
+    if (!file)
+    {
+        cout << "\n\t\t\tNo Data Is Present...";
+        file.close();
+    }else
+
+        file >> fname >>lname >> age >> id_number>> mobail_no>>money;
+        fstream temp;
+        temp.open("temp.txt",ios::app | ios::in);
+        while (!file.eof())
+            {
+                count1++;
+
+
+                if(count1==accno)
+                {
+                    cout<<"Your acoount balnace is :-"<<money;
+                    cout<<"\nEnter your withdraw amount";
+                    cin>>wmoney;
+                    if(wmoney>money)
+                    {
+                        cout<<"\nyour have low Account Balance"<<endl;
+
+                    }else
+                    {
+                        money=money-wmoney;
+                        cout<<"Your account Balance is "<<money<<endl;
+                        temp << fname<<" " <<lname<<" "<< age <<" " <<id_number<<" " <<mobail_no<<" "<<money<<endl;
+                    }
+
+                }else
+                {
+                    temp << fname<<" " <<lname<<" "<< age <<" " <<id_number<<" " <<mobail_no<<" "<<money<<endl;
+                }
+
+            file >> fname >>lname >> age >> id_number>> mobail_no>>money;
+            }
+
+
+            file.close();
+            temp.close();
+            remove("bank_recode.txt");
+            rename("temp.txt","bank_recode.txt");
+            return 0;
+
+
+
+
+}
+
+class Lone:public Account
+{
+private:
+
+    int acc,loneamount;
+
+public:
+   void getlone()
+    {
+        cout<<"Enter your account number";
+        cin>>acc;
+        cout<<"Enter your lone amount";
+        cin>>loneamount;
+
+        fstream Lone2;
+        Lone2.open("lone.txt",ios::app | ios::in);
+
+        Lone2<<acc<<" "<<loneamount<<endl;
+
+        cout<<"Your Lone amout recoded.."<<endl;
+        cout<<"Enter any key to main menu";
+        getch();
+
+    }
+
+
+};
+
+class Employee
+{
+private:
+        int ot;
+        float totsalary;
+public:
+    void salary(int basicsalary)
+    {
+        cout<<"Enter over time:-";
+        cin>>ot;
+        totsalary=basicsalary+(ot*400);
+        cout<<"Your salary:"<<totsalary;
+        cout<<"Enter any key to main menu";
+        getch();
+
+
+    }
+
+    void salary(double basicsalary)
+    {
+        cout<<"Enter over time:-";
+        cin>>ot;
+        totsalary=basicsalary+(ot*200);
+        cout<<"Your salary:"<<totsalary<<endl;
+        cout<<"Enter any key to main menu";
+        getch();
+
+
+    }
+};
+
+
+void menu()
+{
+    system("cls");
+    cout<<"\n\n\n\n\t\t\tNIBM BANK SYSTEM"<<endl;
+    cout<<"\t\tMENU"<<endl;
+    cout<<"\t\t01.CREATE ACCOUNT "<<endl;
+    cout<<"\t\t02.SHOW ACCOUNT DEATILS"<<endl;
+    cout<<"\t\t03.DEPOSIT "<<endl;
+    cout<<"\t\t04.PAYING BILLS OR WITHDRAWAL"<<endl;
+    cout<<"\t\t05.LONE"<<endl;
+    cout<<"\t\t06.EMPLOYEE"<<endl;
+    cout<<"\t\t05.EXIT"<<endl;
+
+
+
+    int x;
+    cin>>x;
+
+    switch(x)
+    {
+        case 1:
+              {
+                  Account obj1;
+                  obj1.create_account();
+                  menu();
+              }
+
+
+              break;
+
+
+        case 2:
+              {
+               Account obj1;
+               obj1.show_account_deatils();
+//             Sleep(2000);
+               getch();
+               menu();
+              }
+               break;
+        case 3:
+                {Account obj1;
+               obj1.deposit();
+//             Sleep(2000);
+               getch();
+               menu();
+               }break;
+        case 4:
+                  {
+                  Account obj1;
+                  obj1.withdrawal();
+                  menu();
+                  }
+               break;
+        case 5:
+                  {
+                  Lone obj1;
+                  obj1.getlone();
+                  menu();
+                  }
+               break;
+        case 6:
+                  {
+
+                      cout<<"Employe Salary"<<endl;
+                      cout<<"01.Derectors"<<endl;
+                      cout<<"02.Other employes"<<endl;
+                      cout<<"Enter Your....";
+                      int y;
+                      cin>>y;
+                      if(y==1)
+                        {Employee obj1;
+                        obj1.salary(75000);
+                        menu();
+                        }else
+                        {
+                        Employee obj1;
+                        obj1.salary(50000.00);
+                        menu();
+                        }
+                  }
+               break;
+
+        case 7:
+               exit(0);
+
+
+        default:
+                cout<<"PLEASE ENTER CORRECT VALUE"<<endl;
+                Sleep(1000);
+                system("cls");
+                menu();
+    }
+
+
+}
+
+
+int main()
+{
+     menu();
+
+    return 0;
+}
